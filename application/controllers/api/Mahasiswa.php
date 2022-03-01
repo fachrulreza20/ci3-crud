@@ -52,7 +52,7 @@ class Mahasiswa extends REST_Controller{
 				'message'	 => 'provide an id'
 			], REST_Controller::HTTP_BAD_REQUEST);
 		}else{
-
+ 
 			if($this->Mahasiswa_model->delete($id) > 0){
 				$this->response([
 					'id'	 	=> $id,
