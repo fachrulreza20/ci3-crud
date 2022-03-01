@@ -15,6 +15,8 @@ class Mahasiswa extends REST_Controller{
 		$this->load->model('Mahasiswa_model');
 	}
 
+
+	// #1 method GET for getting All Data and also Single Data
 	public function index_get(){
 
 		$id = $this->get('id');
@@ -43,6 +45,7 @@ class Mahasiswa extends REST_Controller{
 
 	}
 
+	// #2 method DELETE for Delete Data
 	public function index_delete(){
 		$id = $this->delete('id');
 
@@ -69,5 +72,64 @@ class Mahasiswa extends REST_Controller{
 		}
 	}
 
+	// #3 method POST for Create Data
+	public function index_post(){
+
+		 // asumsi $data sudah clean by client
+		$data = [
+
+			'nama' 	=> $this->post('nama'),
+			'nrp' 	=> $this->post('nrp'),
+			'jurusan' 	=> $this->post('jurusan'),
+		];
+
+
+		if($this->Mahasiswa_model->insert($data) > 0){
+				$this->response([
+					'status' 	=> true,
+					'message'	=> 'Data created successfully'
+				], REST_Controller::HTTP_CREATED);
+		}else{
+				$this->response([
+					'status' 	=> false,
+					'message'	=> 'Failed to create data'
+				], REST_Controller::HTTP_BAD_REQUEST);			
+		}
+
+	}
+
+
+	public function index_put(){
+
+		$id = $this->put('id');
+		$data = [
+			'nama' => $this->put('nama'),
+			'nrp' => $this->put('nrp'),
+			'jurusan' => $this->put('jurusan'),
+
+		];
+
+		if($this->Mahasiswa_model->update($data, $id) > 0){
+			$this->response([
+				'status'	=> true,
+				'message'	=> 'Data updated successfully'
+			], REST_Controller::HTTP_OK);
+		}else{
+			$this->response([
+
+				'status'	=> false,
+				'message'	=> 'Failed to updated data'
+			], REST_Controller::HTTP_BAD_REQUEST);
+		}
+
+	}
+
 }
+
+
+
+
+
+
+
 

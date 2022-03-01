@@ -13,7 +13,7 @@ class Mahasiswa_model extends CI_model{
 
 	}
 
-	public function insert(){
+	public function insert($data = null){
 
 		$data = [
 
@@ -24,6 +24,7 @@ class Mahasiswa_model extends CI_model{
 		];
 
 		$this->db->insert('mahasiswa', $data);
+		return $this->db->affected_rows(); 
 	}
 
 	public function delete($id){
@@ -43,19 +44,25 @@ class Mahasiswa_model extends CI_model{
 	}
 
 
-	public function update(){
-
-		$data = [
-
-			"nama" => $this->input->post('nama', true), // true adalah htmlspecialchars
-			"nrp" => $this->input->post('nrp', true),
-			"jurusan" => $this->input->post('jurusan', true)
-
-		];
+	public function update($data = null, $id = null){
 
 
-	  	$this->db->where('id', $this->input->post('id'));
-		$this->db->update('mahasiswa', $data);
+		if($this->input->server('REQUEST_METHOD') === 'POST') {
+		   //REQUEST FROM WEB CLIENT
+			$data = [
+				"nama" => $this->input->post('nama', true), // true adalah htmlspecialchars
+				"nrp" => $this->input->post('nrp', true),
+				"jurusan" => $this->input->post('jurusan', true)
+			];
+			$this->db->where('id', $this->input->post('id'));
+			$this->db->update('mahasiswa', $data);
+			
+		}elseif($this->input->server('REQUEST_METHOD') === 'PUT') {
+
+			$this->db->update('mahasiswa', $data, ['id' => $id]);
+		}
+
+	  	return $this->db->affected_rows();
 	}
 
 
